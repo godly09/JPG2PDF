@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online tool to convert JPG images to PDF. No registration needed. Just upload, convert and download.">
+    <meta name="keywords" content="jpg to pdf, image converter, pdf converter, online tool, free converter">
+    <meta name="author" content="JPG 2 PDF Converter">
+    <title>JPG 2 PDF Converter Online - Quantum Edition</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00ffff;
+            --secondary: #8a2be2; /* Changed from bright pink to softer purple */
+            --accent: #ffff00;
+            --dark: #0a0a12;
+            --darker: #050508;
+            --light: #f0f0ff;
+            --card-bg: rgba(15, 15, 30, 0.7);
+            --glow: 0 0 15px rgba(0, 255, 255, 0.5); /* Reduced intensity */
+            --glow-secondary: 0 0 15px rgba(138, 43, 226, 0.5); /* Softer purple glow */
+            --glow-yellow: 0 0 15px rgba(255, 255, 0, 0.5); /* Reduced intensity */
+            --success: #00ff88;
+            --error: #ff0066;
+            --warning: #ff9900;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6; /* Improved readability */
+        }
+        
+        h1, h2, h3, h4, h5, h6, .logo-text, .btn {
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        /* Background canvas */
+        .bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        /* Grid overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(to right, rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        /* Header */
+        header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(5, 5, 8, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: var(--dark);
+            border-radius: 8px;
+            font-size: 1.5rem;
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            position: relative;
+        }
+        
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--secondary);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--accent);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+        
+        @keyframes glitch-anim {
+            0% { clip: rect(42px, 9999px, 44px, 0); }
+            5% { clip: rect(12px, 9999px, 59px, 0); }
+            10% { clip: rect(48px, 9999px, 29px, 0); }
+            15% { clip: rect(42px, 9999px, 73px, 0); }
+            20% { clip: rect(63px, 9999px, 27px, 0); }
+            25% { clip: rect(34px, 9999px, 55px, 0); }
+            30% { clip: rect(86px, 9999px, 73px, 0); }
+            35% { clip: rect(20px, 9999px, 20px, 0); }
+            40% { clip: rect(26px, 9999px, 60px, 0); }
+            45% { clip: rect(25px, 9999px, 66px, 0); }
+            50% { clip: rect(57px, 9999px, 98px, 0); }
+            55% { clip: rect(5px, 9999px, 46px, 0); }
+            60% { clip: rect(82px, 9999px, 31px, 0); }
+            65% { clip: rect(54px, 9999px, 27px, 0); }
+            70% { clip: rect(28px, 9999px, 99px, 0); }
+            75% { clip: rect(45px, 9999px, 69px, 0); }
+            80% { clip: rect(23px, 9999px, 85px, 0); }
+            85% { clip: rect(54px, 9999px, 84px, 0); }
+            90% { clip: rect(45px, 9999px, 47px, 0); }
+            95% { clip: rect(24px, 9999px, 23px, 0); }
+            100% { clip: rect(32px, 9999px, 92px, 0); }
+        }
+        
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            5% { clip: rect(52px, 9999px, 74px, 0); }
+            10% { clip: rect(79px, 9999px, 85px, 0); }
+            15% { clip: rect(75px, 9999px, 5px, 0); }
+            20% { clip: rect(67px, 9999px, 61px, 0); }
+            25% { clip: rect(14px, 9999px, 79px, 0); }
+            30% { clip: rect(1px, 9999px, 66px, 0); }
+            35% { clip: rect(86px, 9999px, 30px, 0); }
+            40% { clip: rect(23px, 9999px, 98px, 0); }
+            45% { clip: rect(85px, 9999px, 72px, 0); }
+            50% { clip: rect(71px, 9999px, 75px, 0); }
+            55% { clip: rect(2px, 9999px, 48px, 0); }
+            60% { clip: rect(30px, 9999px, 16px, 0); }
+            65% { clip: rect(59px, 9999px, 50px, 0); }
+            70% { clip: rect(41px, 9999px, 62px, 0); }
+            75% { clip: rect(2px, 9999px, 82px, 0); }
+            80% { clip: rect(47px, 9999px, 73px, 0); }
+            85% { clip: rect(3px, 9999px, 27px, 0); }
+            90% { clip: rect(26px, 9999px, 55px, 0); }
+            95% { clip: rect(42px, 9999px, 97px, 0); }
+            100% { clip: rect(38px, 9999px, 49px, 0); }
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        @media (min-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        /* Cards */
+        .holographic-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: var(--glow);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .holographic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6); /* Reduced intensity */
+        }
+        
+        .holographic-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -1;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+            border-radius: 12px;
+            opacity: 0.7; /* Reduced opacity for softer effect */
+        }
+        
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        /* Upload area */
+        .upload-area {
+            border: 2px dashed rgba(0, 255, 255, 0.5);
+            border-radius: 8px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .upload-area:hover, .upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: var(--glow);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .upload-text {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--light);
+        }
+        
+        .upload-subtext {
+            color: rgba(240, 240, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: rgba(0, 255, 255, 0.2);
+            color: var(--light);
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        .btn:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .btn:hover {
+            background: rgba(0, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-accent {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            font-weight: 700;
+        }
+        
+        .btn-accent:hover {
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            box-shadow: var(--glow-secondary); /* Changed to softer purple */
+        }
+        
+        .btn-secondary {
+            background: rgba(138, 43, 226, 0.2); /* Updated to new secondary color */
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(138, 43, 226, 0.3); /* Updated to new secondary color */
+            box-shadow: var(--glow-secondary); /* Changed to softer purple */
+        }
+        
+        /* Images preview */
+        .images-preview {
+            margin-top: 1.5rem;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 2rem;
+            color: rgba(240, 240, 255, 0.5);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .image-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .image-item:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow);
+            border-color: var(--primary);
+        }
+        
+        .image-item.selected {
+            border-color: var(--accent);
+            box-shadow: var(--glow-yellow);
+        }
+        
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .image-checkbox {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+        
+        .image-item.selected .image-checkbox::after {
+            content: '✓';
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        .image-actions {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.5rem;
+            display: flex;
+            justify-content: center;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .image-item:hover .image-actions {
+            transform: translateY(0);
+        }
+        
+        .image-action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--error);
+            color: white;
+            cursor: pointer;
+        }
+        
+        /* Form elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--light);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--light);
+            font-family: 'Roboto', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: var(--glow);
+        }
+        
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        input[type="range"] {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 5px;
+            background: rgba(0, 255, 255, 0.2);
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: var(--glow);
+        }
+        
+        .range-value {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        /* Actions */
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        @media (min-width: 576px) {
+            .actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .actions .btn:first-child {
+                grid-column: 1 / -1;
+            }
+        }
+        
+        /* Progress section */
+        .conversion-progress {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(0, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+        
+        .progress-text {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: rgba(240, 240, 255, 0.8);
+        }
+        
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .toast {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid var(--success);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: toast-in 0.4s cubic-bezier(0.21, 1.02, 0.73, 1) forwards;
+            max-width: 350px;
+        }
+        
+        .toast.error {
+            border-left-color: var(--error);
+        }
+        
+        .toast.warning {
+            border-left-color: var(--warning);
+        }
+        
+        .toast-icon {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        
+        .toast.success .toast-icon {
+            color: var(--success);
+        }
+        
+        .toast.error .toast-icon {
+            color: var(--error);
+        }
+        
+        .toast.warning .toast-icon {
+            color: var(--warning);
+        }
+        
+        .toast-content {
+            flex: 1;
+        }
+        
+        .toast-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .toast-message {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.25rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        
+        .toast-close:hover {
+            opacity: 1;
+        }
+        
+        @keyframes toast-in {
+            0% { transform: translateX(100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes toast-out {
+            0% { transform: translateX(0); opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+        
+        /* Keyboard hint */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Footer */
+        footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(240, 240, 255, 0.7);
+        }
+        
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Spinner */
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--light);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Focus styles for accessibility */
+        a:focus, button:focus, input:focus, select:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+        
+        /* Skip to content link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary);
+            color: var(--dark);
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.3s;
+            font-weight: 700;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --light: #ffffff;
+                --primary: #00ffff;
+                --secondary: #ff00ff;
+            }
+            
+            .holographic-card {
+                border: 2px solid var(--primary);
+            }
+            
+            .btn {
+                border: 1px solid var(--primary);
+            }
+        }
+        
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .glitch::before, .glitch::after {
+                animation: none !important;
+            }
+            
+            .holographic-card::before {
+                animation: none !important;
+            }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .holographic-card {
+                padding: 1.5rem;
+            }
+            
+            .upload-area {
+                padding: 1.5rem;
+            }
+            
+            .images-preview {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+            
+            .toast-container {
+                bottom: 1rem;
+                right: 1rem;
+                left: 1rem;
+            }
+            
+            .toast {
+                max-width: 100%;
+            }
+
+            /* Improved mobile touch targets */
+            .btn {
+                padding: 1rem 1.75rem;
+                min-height: 44px; /* Minimum touch target size */
+            }
+
+            input[type="range"]::-webkit-slider-thumb {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 480px) {
+            .logo-text {
+                font-size: 1.4rem;
+            }
+            
+            .card-title {
+                font-size: 1.25rem;
+            }
+            
+            .upload-text {
+                font-size: 1.1rem;
+            }
+            
+            .actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .keyboard-hint {
+                bottom: 0.5rem;
+                left: 0.5rem;
+                right: 0.5rem;
+                text-align: center;
+                justify-content: center;
+            }
+        }
+
+        /* Print styles for better printing experience */
+        @media print {
+            .bg-canvas,
+            .grid-overlay,
+            .keyboard-hint,
+            .toast-container,
+            .holographic-card::before,
+            .btn,
+            .image-actions {
+                display: none !important;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .holographic-card {
+                background: white;
+                border: 1px solid #ccc;
+                box-shadow: none;
+            }
+            
+            .upload-area {
+                border: 2px dashed #ccc;
+            }
+            
+            footer {
+                border-top: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <canvas class="bg-canvas" id="bgCanvas"></canvas>
+    <div class="grid-overlay"></div>
+    
+    <header>
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-file-pdf"></i>
+            </div>
+            <h1 class="logo-text glitch" data-text="JPG 2 PDF">JPG 2 PDF</h1>
+        </div>
+    </header>
+    
+    <main class="container" id="main-content">
+        <div class="main-content">
+            <section class="holographic-card">
+                <h2 class="card-title">
+                    <i class="fas fa-upload"></i>
+                    Upload Your Images
+                </h2>
+                
+                <div class="upload-area" id="dropArea" tabindex="0" role="button" aria-label="Upload images area">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3 class="upload-text">Drag & Drop Your Images</h3>
+                    <p class="upload-subtext">Supports JPG, JPEG files. Maximum 20 images at once.</p>
+                    <input type="file" id="fileInput" accept="image/jpeg, image/jpg" multiple hidden aria-label="Select image files">
+                    <button class="btn" id="browseBtn" aria-label="Browse for image files">
+                        <i class="fas fa-folder-open"></i>
+                        Browse Files
+                    </button>
+                </div>
+                
+                <div class="images-preview" id="imagesPreview" role="region" aria-label="Image preview">
+                    <div class="empty-state">
+                        <i class="fas fa-images"></i>
+                        <p>No images selected</p>
+                    </div>
+                </div>
+                
+                <div class="conversion-progress" id="progressSection" hidden aria-live="polite">
+                    <div class="progress-header">
+                        <h4>Converting images...</h4>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p class="progress-text" id="progressText">Processing your images...</p>
+                </div>
+            </section>
+            
+            <section class="holographic-card">
+                <h2 class="card-title">
+                    <i class="fas fa-cog"></i>
+                    PDF Settings
+                </h2>
+                
+                <div class="form-group">
+                    <label for="pageSize">
+                        <i class="fas fa-file"></i>
+                        Page Size
+                    </label>
+                    <select id="pageSize" class="form-control" aria-label="Select page size">
+                        <option value="a4">A4 (210 × 297 mm)</option>
+                        <option value="letter">Letter (8.5 × 11 in)</option>
+                        <option value="legal">Legal (8.5 × 14 in)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="orientation">
+                        <i class="fas fa-compress-alt"></i>
+                        Orientation
+                    </label>
+                    <select id="orientation" class="form-control" aria-label="Select page orientation">
+                        <option value="portrait">Portrait</option>
+                        <option value="landscape">Landscape</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="quality">
+                        <i class="fas fa-bolt"></i>
+                        Quality
+                    </label>
+                    <select id="quality" class="form-control" aria-label="Select image quality">
+                        <option value="high">High (Larger file size)</option>
+                        <option value="medium" selected>Medium (Recommended)</option>
+                        <option value="low">Low (Smaller file size)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="margin">
+                        <i class="fas fa-border-all"></i>
+                        Margin (mm)
+                    </label>
+                    <div class="range-container">
+                        <input type="range" id="margin" class="form-control" min="0" max="50" value="10" aria-label="Set margin size">
+                        <span class="range-value" id="marginValue" aria-live="polite">10</span>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button class="btn btn-accent" id="convertBtn" aria-label="Convert images to PDF">
+                        <i class="fas fa-download"></i>
+                        Convert & Download PDF
+                    </button>
+                    <button class="btn btn-secondary" id="selectAllBtn" aria-label="Select all images">
+                        <i class="fas fa-check-square"></i>
+                        Select All
+                    </button>
+                    <button class="btn btn-secondary" id="removeSelectedBtn" aria-label="Remove selected images">
+                        <i class="fas fa-trash"></i>
+                        Remove Selected
+                    </button>
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <p>© 2023 JPG 2 PDF Converter Online - Quantum Edition | All rights reserved</p>
+            <p>Privacy Policy | Terms of Service | Contact Us</p>
+        </footer>
+    </main>
+    
+    <div class="toast-container" id="toastContainer" role="alert" aria-live="polite"></div>
+    <div class="keyboard-hint">
+        <i class="fas fa-keyboard"></i>
+        <span>Press Ctrl+/ for keyboard shortcuts</span>
+    </div>
+    
+    <script>
+        // Wait for the jsPDF library to load
+        window.jsPDF = window.jspdf.jsPDF;
+        
+        // Application state management
+        const appState = {
+            images: [],
+            selectedImages: new Set(),
+            isProcessing: false,
+            maxImages: 20,
+            maxParticles: 100,
+            particleConnectionDistance: 100,
+            toastDuration: 5000,
+            progressAnimationDuration: 0.4,
+            buttonHoverTransform: -3
+        };
+        
+        // DOM elements
+        const elements = {
+            dropArea: document.getElementById('dropArea'),
+            fileInput: document.getElementById('fileInput'),
+            browseBtn: document.getElementById('browseBtn'),
+            imagesPreview: document.getElementById('imagesPreview'),
+            convertBtn: document.getElementById('convertBtn'),
+            selectAllBtn: document.getElementById('selectAllBtn'),
+            removeSelectedBtn: document.getElementById('removeSelectedBtn'),
+            progressSection: document.getElementById('progressSection'),
+            progressFill: document.getElementById('progressFill'),
+            progressText: document.getElementById('progressText'),
+            progressPercent: document.getElementById('progressPercent'),
+            marginSlider: document.getElementById('margin'),
+            marginValue: document.getElementById('marginValue'),
+            toastContainer: document.getElementById('toastContainer')
+        };
+        
+        // Particle system for background (optimized)
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationId = null;
+        let isAnimationPaused = false;
+        
+        // Initialize canvas
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        // Particle class
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+                this.color = `hsl(${Math.random() * 60 + 180}, 100%, 50%)`;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                if (this.x > canvas.width) this.x = 0;
+                else if (this.x < 0) this.x = canvas.width;
+                
+                if (this.y > canvas.height) this.y = 0;
+                else if (this.y < 0) this.y = canvas.height;
+            }
+            
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Draw connections
+                for (let i = 0; i < particles.length; i++) {
+                    const dx = this.x - particles[i].x;
+                    const dy = this.y - particles[i].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < appState.particleConnectionDistance) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 255, 255, ${1 - distance / appState.particleConnectionDistance})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(this.x, this.y);
+                        ctx.lineTo( particles[i].x, particles[i].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        // Initialize particles
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < appState.maxParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+        
+        // Animation loop with pause/resume capability
+        function animateParticles() {
+            if (isAnimationPaused) return;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            
+            animationId = requestAnimationFrame(animateParticles);
+        }
+        
+        // Start/stop animation based on visibility
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                isAnimationPaused = true;
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                }
+            } else {
+                isAnimationPaused = false;
+                animateParticles();
+            }
+        }
+        
+        // Event Listeners
+        elements.browseBtn.addEventListener('click', () => elements.fileInput.click());
+        elements.fileInput.addEventListener('change', handleFileSelect);
+        elements.dropArea.addEventListener('dragover', handleDragOver);
+        elements.dropArea.addEventListener('dragleave', handleDragLeave);
+        elements.dropArea.addEventListener('drop', handleDrop);
+        elements.convertBtn.addEventListener('click', convertToPdf);
+        elements.selectAllBtn.addEventListener('click', selectAllImages);
+        elements.removeSelectedBtn.addEventListener('click', removeSelectedImages);
+        elements.marginSlider.addEventListener('input', updateMarginValue);
+        
+        // Keyboard navigation for image selection
+        elements.imagesPreview.addEventListener('keydown', handleImageKeyboardNavigation);
+        
+        // Visibility change for performance
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        
+        // Window resize
+        window.addEventListener('resize', () => {
+            initCanvas();
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === '/') {
+                e.preventDefault();
+                showToast('Keyboard Shortcuts', 'Ctrl+A: Select all, Delete: Remove selected', 'success');
+            } else if (e.ctrlKey && e.key === 'a') {
+                e.preventDefault();
+                selectAllImages();
+            } else if (e.key === 'Delete') {
+                removeSelectedImages();
+            }
+        });
+        
+        // Functions
+        function handleDragOver(e) {
+            e.preventDefault();
+            elements.dropArea.classList.add('dragover');
+        }
+        
+        function handleDragLeave(e) {
+            e.preventDefault();
+            elements.dropArea.classList.remove('dragover');
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            elements.dropArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            processFiles(files);
+        }
+        
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            processFiles(files);
+            // Clear the input to allow uploading the same file again
+            e.target.value = '';
+        }
+        
+        function processFiles(files) {
+            if (files.length > appState.maxImages) {
+                showToast('Too Many Files', `Maximum ${appState.maxImages} images allowed at once`, 'error');
+                return;
+            }
+            
+            let validFiles = 0;
+            let processedFiles = 0;
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                
+                // Validate file type
+                if (!file.type.match('image/jpeg') && !file.type.match('image/jpg')) {
+                    continue;
+                }
+                
+                // Validate file size (warn for large files)
+                if (file.size > 10 * 1024 * 1024) { // 10MB
+                    showToast('Large File', `${file.name} is large and may take longer to process`, 'warning');
+                }
+                
+                validFiles++;
+                
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        // Validate image data
+                        const img = new Image();
+                        img.src = e.target.result;
+                        
+                        img.onload = function() {
+                            // Compress image if needed
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+                            
+                            // Set maximum dimensions
+                            const maxWidth = 2000;
+                            const maxHeight = 2000;
+                            let width = img.width;
+                            let height = img.height;
+                            
+                            if (width > maxWidth || height > maxHeight) {
+                                const ratio = Math.min(maxWidth / width, maxHeight / height);
+                                width *= ratio;
+                                height *= ratio;
+                            }
+                            
+                            canvas.width = width;
+                            canvas.height = height;
+                            ctx.drawImage(img, 0, 0, width, height);
+                            
+                            // Get compressed data URL
+                            const quality = getCompressionQuality();
+                            const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                            
+                            appState.images.push({
+                                id: Date.now() + processedFiles,
+                                name: file.name,
+                                dataUrl: compressedDataUrl,
+                                width: width,
+                                height: height
+                            });
+                            
+                            processedFiles++;
+                            updatePreview();
+                            
+                            // Show success message after all files are processed
+                            if (processedFiles === validFiles) {
+                                showToast('Files Added', `${validFiles} image(s) added successfully`, 'success');
+                                
+                                // Clean up canvas to free memory
+                                canvas.width = 0;
+                                canvas.height = 0;
+                            }
+                        };
+                        
+                        img.onerror = function() {
+                            processedFiles++;
+                            showToast('Invalid Image', `${file.name} appears to be corrupted`, 'error');
+                            
+                            if (processedFiles === validFiles) {
+                                updatePreview();
+                            }
+                        };
+                        
+                    } catch (error) {
+                        console.error('Error processing image:', error);
+                        processedFiles++;
+                        showToast('Processing Error', `Failed to process ${file.name}`, 'error');
+                        
+                        if (processedFiles === validFiles) {
+                            updatePreview();
+                        }
+                    }
+                };
+                
+                reader.onerror = function() {
+                    processedFiles++;
+                    showToast('File Read Error', `Failed to read ${file.name}`, 'error');
+                    
+                    if (processedFiles === validFiles) {
+                        updatePreview();
+                    }
+                };
+                
+                reader.readAsDataURL(file);
+            }
+            
+            if (validFiles === 0) {
+                showToast('Invalid Files', 'Please select JPG/JPEG images only', 'error');
+            }
+        }
+        
+        function getCompressionQuality() {
+            const quality = document.getElementById('quality').value;
+            switch (quality) {
+                case 'high': return 0.9;
+                case 'medium': return 0.7;
+                case 'low': return 0.5;
+                default: return 0.7;
+            }
+        }
+        
+        function updatePreview() {
+            if (appState.images.length === 0) {
+                elements.imagesPreview.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-images"></i>
+                        <p>No images selected</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            elements.imagesPreview.innerHTML = '';
+            
+            appState.images.forEach(image => {
+                // Verify image still exists in the main array
+                if (!appState.images.find(img => img.id === image.id)) return;
+                
+                const imageItem = document.createElement('div');
+                imageItem.className = 'image-item';
+                imageItem.dataset.id = image.id;
+                imageItem.setAttribute('tabindex', '0');
+                imageItem.setAttribute('role', 'button');
+                imageItem.setAttribute('aria-label', `Image ${image.name}, press space to select`);
+                
+                if (appState.selectedImages.has(image.id)) {
+                    imageItem.classList.add('selected');
+                }
+                
+                imageItem.innerHTML = `
+                    <div class="image-checkbox" role="checkbox" aria-checked="${appState.selectedImages.has(image.id)}" tabindex="0"></div>
+                    <img src="${image.dataUrl}" alt="${image.name}" loading="lazy">
+                    <div class="image-actions">
+                        <div class="image-action-btn btn-remove" role="button" aria-label="Remove image ${image.name}" tabindex="0">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                `;
+                
+                // Add click event for image selection
+                imageItem.addEventListener('click', (e) => {
+                    if (!e.target.closest('.image-action-btn')) {
+                        toggleSelectImage(image.id);
+                    }
+                });
+                
+                elements.imagesPreview.appendChild(imageItem);
+            });
+        }
+        
+        function handleImageKeyboardNavigation(e) {
+            if (e.target.classList.contains('image-item')) {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    const imageId = parseInt(e.target.dataset.id);
+                    toggleSelectImage(imageId);
+                }
+            }
+        }
+        
+        function removeImage(id) {
+            // Clean up image data to free memory
+            const imageIndex = appState.images.findIndex(img => img.id === id);
+            if (imageIndex !== -1) {
+                // Clear the data URL to free memory
+                appState.images[imageIndex].dataUrl = '';
+                appState.images.splice(imageIndex, 1);
+            }
+            
+            appState.selectedImages.delete(id);
+            updatePreview();
+            showToast('Image Removed', 'The image has been removed', 'success');
+        }
+        
+        function toggleSelectImage(id) {
+            // Verify image exists before toggling
+            if (!appState.images.find(img => img.id === id)) return;
+            
+            if (appState.selectedImages.has(id)) {
+                appState.selectedImages.delete(id);
+            } else {
+                appState.selectedImages.add(id);
+            }
+            updatePreview();
+        }
+        
+        function selectAllImages() {
+            if (appState.selectedImages.size === appState.images.length) {
+                appState.selectedImages.clear();
+                showToast('Selection Cleared', 'All images deselected', 'success');
+            } else {
+                appState.images.forEach(img => appState.selectedImages.add(img.id));
+                showToast('All Selected', `${appState.images.length} images selected`, 'success');
+            }
+            updatePreview();
+        }
+        
+        function removeSelectedImages() {
+            if (appState.selectedImages.size === 0) {
+                showToast('No Selection', 'Please select images to remove', 'error');
+                return;
+            }
+            
+            const count = appState.selectedImages.size;
+            
+            // Clean up image data to free memory
+            appState.images = appState.images.filter(img => {
+                if (appState.selectedImages.has(img.id)) {
+                    // Clear the data URL to free memory
+                    img.dataUrl = '';
+                    return false;
+                }
+                return true;
+            });
+            
+            appState.selectedImages.clear();
+            updatePreview();
+            showToast('Images Removed', `${count} images removed`, 'success');
+        }
+        
+        function updateMarginValue() {
+            elements.marginValue.textContent = elements.marginSlider.value;
+        }
+        
+        async function convertToPdf() {
+            if (appState.images.length === 0) {
+                showToast('No Images', 'Please add at least one image', 'error');
+                return;
+            }
+            
+            if (appState.isProcessing) {
+                showToast('Processing', 'Please wait for the current conversion to complete', 'warning');
+                return;
+            }
+            
+            // Set processing state
+            appState.isProcessing = true;
+            elements.convertBtn.disabled = true;
+            elements.convertBtn.innerHTML = '<span class="spinner"></span> Converting...';
+            
+            // Pause particle animation during conversion for better performance
+            isAnimationPaused = true;
+            
+            // Show progress
+            elements.progressSection.hidden = false;
+            elements.progressFill.style.width = '0%';
+            elements.progressText.textContent = 'Processing your images...';
+            elements.progressPercent.textContent = '0%';
+            
+            const pageSize = document.getElementById('pageSize').value;
+            const orientation = document.getElementById('orientation').value;
+            const margin = parseInt(elements.marginSlider.value);
+            
+            try {
+                // Create PDF
+                const pdf = new jsPDF({
+                    orientation: orientation,
+                    unit: 'mm',
+                    format: pageSize
+                });
+                
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                const contentWidth = pdfWidth - (margin * 2);
+                const contentHeight = pdfHeight - (margin * 2);
+                
+                let processed = 0;
+                const total = appState.images.length;
+                
+                // Process images sequentially
+                for (let i = 0; i < appState.images.length; i++) {
+                    const image = appState.images[i];
+                    
+                    if (i > 0) {
+                        pdf.addPage();
+                    }
+                    
+                    await new Promise((resolve, reject) => {
+                        try {
+                            const img = new Image();
+                            img.src = image.dataUrl;
+                            
+                            img.onload = function() {
+                                try {
+                                    // Calculate dimensions to fit within page
+                                    let imgWidth = image.width;
+                                    let imgHeight = image.height;
+                                    
+                                    const ratio = Math.min(contentWidth / imgWidth, contentHeight / imgHeight);
+                                    imgWidth *= ratio;
+                                    imgHeight *= ratio;
+                                    
+                                    const x = margin + (contentWidth - imgWidth) / 2;
+                                    const y = margin + (contentHeight - imgHeight) / 2;
+                                    
+                                    pdf.addImage(img, 'JPEG', x, y, imgWidth, imgHeight, null, 'FAST');
+                                    
+                                    // Update progress
+                                    processed++;
+                                    const progress = Math.round((processed / total) * 100);
+                                    elements.progressFill.style.width = `${progress}%`;
+                                    elements.progressPercent.textContent = `${progress}%`;
+                                    elements.progressText.textContent = `Processing ${processed} of ${total} images`;
+                                    
+                                    // Update ARIA attributes
+                                    elements.progressFill.parentElement.setAttribute('aria-valuenow', progress);
+                                    
+                                    resolve();
+                                } catch (error) {
+                                    reject(error);
+                                }
+                            };
+                            
+                            img.onerror = function() {
+                                reject(new Error(`Failed to load image: ${image.name}`));
+                            };
+                            
+                            // Set a timeout for image loading
+                            setTimeout(() => {
+                                reject(new Error(`Image loading timed out: ${image.name}`));
+                            }, 10000); // 10 seconds timeout
+                            
+                        } catch (error) {
+                            reject(error);
+                        }
+                    });
+                    
+                    // Small delay to allow UI updates
+                    await new Promise(resolve => setTimeout(resolve, 10));
+                }
+                
+                // Generate filename with timestamp
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+                const filename = `converted-${timestamp}.pdf`;
+                
+                // Save the PDF
+                pdf.save(filename);
+                
+                // Hide progress
+                elements.progressSection.hidden = true;
+                
+                // Show success message
+                showToast('Download Complete', `PDF "${filename}" has been downloaded to your device`, 'success');
+                
+            } catch (error) {
+                console.error('Error converting to PDF:', error);
+                elements.progressSection.hidden = true;
+                showToast('Conversion Error', error.message || 'Failed to convert images', 'error');
+            } finally {
+                // Reset processing state
+                appState.isProcessing = false;
+                elements.convertBtn.disabled = false;
+                elements.convertBtn.innerHTML = '<i class="fas fa-download"></i> Convert & Download PDF';
+                
+                // Resume particle animation
+                isAnimationPaused = false;
+                animateParticles();
+            }
+        }
+        
+        function showToast(title, message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.style.animation = 'toast-in 0.4s cubic-bezier(0.21, 1.02, 0.73, 1) forwards';
+            toast.setAttribute('role', 'alert');
+            
+            toast.innerHTML = `
+                <div class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '⚠' : '!'}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" aria-label="Close notification">&times;</button>
+            `;
+            
+            elements.toastContainer.appendChild(toast);
+            
+            // Add event listener to close button
+            toast.querySelector('.toast-close').addEventListener('click', () => {
+                toast.style.animation = 'toast-out 0.3s ease forwards';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        elements.toastContainer.removeChild(toast);
+                    }
+                }, 300);
+            });
+            
+            // Auto remove after specified duration
+            setTimeout(() => {
+                if (toast.parentNode === elements.toastContainer) {
+                    toast.style.animation = 'toast-out 0.3s ease forwards';
+                    setTimeout(() => {
+                        if (toast.parentNode === elements.toastContainer) {
+                            elements.toastContainer.removeChild(toast);
+                        }
+                    }, 300);
+                }
+            }, appState.toastDuration);
+        }
+        
+        // Initialize application
+        function initApp() {
+            // Initialize canvas and particles
+            initCanvas();
+            initParticles();
+            animateParticles();
+            
+            // Set initial values
+            updateMarginValue();
+            
+            // Show welcome message
+            setTimeout(() => {
+                showToast('Welcome to JPG 2 PDF', 'Upload your images to convert them to PDF', 'success');
+            }, 1000);
+        }
+        
+        // Start the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
