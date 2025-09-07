@@ -1,27 +1,67 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Free online tool to convert JPG images to PDF. No registration needed. Just upload, convert and download.">
-    <meta name="keywords" content="jpg to pdf, image converter, pdf converter, online tool, free converter">
+    <meta name="description" content="Free online JPG to PDF converter. Convert images to PDF quickly without registration. Multiple image support, adjustable quality, and instant download. 100% secure and private.">
+    <meta name="keywords" content="jpg to pdf, convert jpg to pdf, image to pdf converter, jpeg to pdf, online pdf converter, free pdf converter, multiple jpg to pdf, jpg to pdf online">
     <meta name="author" content="JPG 2 PDF Converter">
-    <title>JPG 2 PDF Converter Online - Quantum Edition</title>
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yourdomain.com/jpg-to-pdf-converter" />
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Free JPG to PDF Converter Online - Quantum Edition">
+    <meta property="og:description" content="Convert JPG images to PDF documents instantly. No registration, unlimited conversions, and full privacy protection.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/jpg-to-pdf-converter">
+    <meta property="og:image" content="https://yourdomain.com/images/jpg-to-pdf-converter-preview.jpg">
+    <meta property="og:site_name" content="JPG 2 PDF Converter">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Free JPG to PDF Converter Online - Quantum Edition">
+    <meta name="twitter:description" content="Convert JPG images to PDF documents instantly. No registration needed.">
+    <meta name="twitter:image" content="https://yourdomain.com/images/jpg-to-pdf-converter-twitter-preview.jpg">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "JPG to PDF Converter",
+      "url": "https://yourdomain.com/jpg-to-pdf-converter",
+      "description": "Free online tool to convert JPG images to PDF documents quickly and easily.",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "JPG 2 PDF Converter"
+      }
+    }
+    </script>
+    
+    <title>Free JPG to PDF Converter Online - Convert Images to PDF Instantly</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #00ffff;
-            --secondary: #8a2be2; /* Changed from bright pink to softer purple */
+            --secondary: #8a2be2;
             --accent: #ffff00;
             --dark: #0a0a12;
             --darker: #050508;
             --light: #f0f0ff;
             --card-bg: rgba(15, 15, 30, 0.7);
-            --glow: 0 0 15px rgba(0, 255, 255, 0.5); /* Reduced intensity */
-            --glow-secondary: 0 0 15px rgba(138, 43, 226, 0.5); /* Softer purple glow */
-            --glow-yellow: 0 0 15px rgba(255, 255, 0, 0.5); /* Reduced intensity */
+            --glow: 0 0 15px rgba(0, 255, 255, 0.5);
+            --glow-secondary: 0 0 15px rgba(138, 43, 226, 0.5);
+            --glow-yellow: 0 0 15px rgba(255, 255, 0, 0.5);
             --success: #00ff88;
             --error: #ff0066;
             --warning: #ff9900;
@@ -40,7 +80,7 @@
             overflow-x: hidden;
             position: relative;
             font-family: 'Roboto', sans-serif;
-            line-height: 1.6; /* Improved readability */
+            line-height: 1.6;
         }
         
         h1, h2, h3, h4, h5, h6, .logo-text, .btn {
@@ -217,7 +257,7 @@
         
         .holographic-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6); /* Reduced intensity */
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
         }
         
         .holographic-card::before {
@@ -232,7 +272,7 @@
             background-size: 400% 400%;
             animation: gradient-shift 15s ease infinite;
             border-radius: 12px;
-            opacity: 0.7; /* Reduced opacity for softer effect */
+            opacity: 0.7;
         }
         
         @keyframes gradient-shift {
@@ -335,16 +375,16 @@
         
         .btn-accent:hover {
             background: linear-gradient(45deg, var(--secondary), var(--primary));
-            box-shadow: var(--glow-secondary); /* Changed to softer purple */
+            box-shadow: var(--glow-secondary);
         }
         
         .btn-secondary {
-            background: rgba(138, 43, 226, 0.2); /* Updated to new secondary color */
+            background: rgba(138, 43, 226, 0.2);
         }
         
         .btn-secondary:hover {
-            background: rgba(138, 43, 226, 0.3); /* Updated to new secondary color */
-            box-shadow: var(--glow-secondary); /* Changed to softer purple */
+            background: rgba(138, 43, 226, 0.3);
+            box-shadow: var(--glow-secondary);
         }
         
         /* Images preview */
@@ -671,6 +711,64 @@
             backdrop-filter: blur(5px);
         }
         
+        /* SEO Content Section */
+        .seo-content {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: var(--glow);
+        }
+        
+        .seo-content h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .seo-content h3 {
+            color: var(--primary);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.4rem;
+        }
+        
+        .seo-content p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+        
+        .seo-content ul, .seo-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .seo-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .faq-item {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            padding-bottom: 1rem;
+        }
+        
+        .faq-question {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            color: rgba(240, 240, 255, 0.9);
+            padding-left: 1rem;
+            border-left: 2px solid var(--secondary);
+        }
+        
         /* Footer */
         footer {
             margin-top: 3rem;
@@ -683,6 +781,25 @@
         
         footer p {
             margin-bottom: 0.5rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+            text-decoration: underline;
         }
         
         /* Spinner */
@@ -793,12 +910,16 @@
             /* Improved mobile touch targets */
             .btn {
                 padding: 1rem 1.75rem;
-                min-height: 44px; /* Minimum touch target size */
+                min-height: 44px;
             }
 
             input[type="range"]::-webkit-slider-thumb {
                 width: 24px;
                 height: 24px;
+            }
+            
+            .seo-content {
+                padding: 1.5rem;
             }
         }
 
@@ -826,6 +947,11 @@
                 right: 0.5rem;
                 text-align: center;
                 justify-content: center;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 0.75rem;
             }
         }
 
@@ -858,6 +984,10 @@
             
             footer {
                 border-top: 1px solid #ccc;
+            }
+            
+            .seo-content {
+                border: 1px solid #ccc;
             }
         }
     </style>
@@ -985,9 +1115,93 @@
             </section>
         </div>
         
+        <!-- SEO Content Section -->
+        <section class="seo-content">
+            <h2>Free Online JPG to PDF Converter</h2>
+            <p>Our JPG to PDF converter is a powerful, free online tool that allows you to convert multiple JPG images into a single PDF document quickly and easily. Whether you need to create a portfolio, combine photos for a project, or archive important images, our converter provides a seamless solution with no registration required.</p>
+            
+            <h3>Why Use Our JPG to PDF Converter?</h3>
+            <ul>
+                <li><strong>100% Free</strong> - No hidden fees, no watermarks, no registration required</li>
+                <li><strong>Multiple Image Support</strong> - Convert up to 20 JPG images at once into a single PDF</li>
+                <li><strong>Full Privacy Protection</strong> - Your files are processed entirely in your browser and never uploaded to any server</li>
+                <li><strong>Customizable Settings</strong> - Adjust page size, orientation, quality, and margins to suit your needs</li>
+                <li><strong>High-Quality Output</strong> - Maintain image quality while reducing file size when needed</li>
+                <li><strong>Cross-Platform Compatibility</strong> - Works on all devices and browsers</li>
+            </ul>
+            
+            <h3>How to Convert JPG to PDF</h3>
+            <ol>
+                <li>Click "Browse Files" or drag and drop your JPG images into the upload area</li>
+                <li>Select your preferred PDF settings (page size, orientation, quality, margins)</li>
+                <li>Click "Convert & Download PDF" to process your images</li>
+                <li>Your PDF will be generated and downloaded automatically</li>
+            </ol>
+            
+            <h3>Frequently Asked Questions</h3>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="this.nextElementSibling.classList.toggle('active')">
+                    Is this JPG to PDF converter really free?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes, our JPG to PDF converter is completely free to use with no hidden costs. There are no watermarks, no registration requirements, and no limitations on the number of conversions you can perform.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="this.nextElementSibling.classList.toggle('active')">
+                    Are my images secure when using this converter?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Absolutely. Your privacy is our priority. All image processing happens directly in your browser using JavaScript. Your files are never uploaded to any server, ensuring complete confidentiality and security.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="this.nextElementSibling.classList.toggle('active')">
+                    What is the maximum number of images I can convert at once?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    You can convert up to 20 JPG or JPEG images in a single conversion process. If you have more images to convert, we recommend splitting them into multiple batches.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="this.nextElementSibling.classList.toggle('active')">
+                    What page sizes are available for the PDF output?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Our converter supports three standard page sizes: A4 (210 × 297 mm), Letter (8.5 × 11 inches), and Legal (8.5 × 14 inches). You can also adjust margins to customize the layout further.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="this.nextElementSibling.classList.toggle('active')">
+                    Can I use this converter on mobile devices?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes, our JPG to PDF converter is fully responsive and works on all mobile devices, including smartphones and tablets. The interface adjusts automatically to provide an optimal experience on any screen size.
+                </div>
+            </div>
+            
+            <p><strong>Perfect for:</strong> Students, photographers, professionals, businesses, and anyone who needs to convert JPG images to PDF format for sharing, archiving, or printing purposes.</p>
+        </section>
+        
         <footer>
             <p>© 2023 JPG 2 PDF Converter Online - Quantum Edition | All rights reserved</p>
-            <p>Privacy Policy | Terms of Service | Contact Us</p>
+            <div class="footer-links">
+                <a href="/privacy-policy">Privacy Policy</a>
+                <a href="/terms-of-service">Terms of Service</a>
+                <a href="/contact-us">Contact Us</a>
+                <a href="/about">About</a>
+                <a href="/sitemap">Sitemap</a>
+            </div>
         </footer>
     </main>
     
